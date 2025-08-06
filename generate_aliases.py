@@ -1,19 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Copyright 2017 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 from __future__ import print_function
 import itertools
@@ -34,48 +19,50 @@ def main():
 
     ops = [
         ('a', 'apply --recursive -f', None, None),
-        ('ak', 'apply -k', None, ['sys']),
-        ('k', 'kustomize', None, ['sys']),
-        ('ex', 'exec -i -t', None, None),
-        ('lo', 'logs -f', None, None),
-        ('lop', 'logs -f -p', None, None),
-        ('p', 'proxy', None, ['sys']),
-        ('pf', 'port-forward', None, ['sys']),
+        # ('ak', 'apply -k', None, ['sys']),
+        # ('k', 'kustomize', None, ['sys']),
+        ('x', 'exec -i -t', None, None),
+        ('l', 'logs -f', None, None),
+        # ('lp', 'logs -f -p', None, None),
+        # ('p', 'proxy', None, ['sys']),
+        # ('pf', 'port-forward', None, ['sys']),
         ('g', 'get', None, None),
         ('d', 'describe', None, None),
         ('rm', 'delete', None, None),
-        ('run', 'run --rm --restart=Never --image-pull-policy=IfNotPresent -i -t', None, None),
+        # ('run', 'run --rm --restart=Never --image-pull-policy=IfNotPresent -i -t', None, None),
+        ('e', 'edit', None, None),
         ]
 
     res = [
-        ('po', 'pods', ['g', 'd', 'rm'], None),
-        ('dep', 'deployment', ['g', 'd', 'rm'], None),
-        ('sts', 'statefulset', ['g', 'd', 'rm'], None),
-        ('svc', 'service', ['g', 'd', 'rm'], None),
-        ('ing', 'ingress', ['g', 'd', 'rm'], None),
+        ('p', 'pods', ['g', 'd', 'rm'], None),
+        ('dp', 'deployment', ['g', 'd', 'rm'], None),
+        # ('sts', 'statefulset', ['g', 'd', 'rm'], None),
+        ('sv', 'service', ['g', 'd', 'rm'], None),
+        ('i', 'ingress', ['g', 'd', 'rm'], None),
         ('cm', 'configmap', ['g', 'd', 'rm'], None),
-        ('sec', 'secret', ['g', 'd', 'rm'], None),
-        ('no', 'nodes', ['g', 'd'], ['sys']),
+        ('s', 'secret', ['g', 'd', 'rm'], None),
+        # ('no', 'nodes', ['g', 'd'], ['sys']),
         ('ns', 'namespaces', ['g', 'd', 'rm'], ['sys']),
         ]
     res_types = [r[0] for r in res]
 
     args = [
-        ('oyaml', '-o=yaml', ['g'], ['owide', 'ojson', 'sl']),
-        ('owide', '-o=wide', ['g'], ['oyaml', 'ojson']),
-        ('ojson', '-o=json', ['g'], ['owide', 'oyaml', 'sl']),
-        ('all', '--all-namespaces', ['g', 'd'], ['rm', 'f', 'no', 'ns', 'sys']),
-        ('sl', '--show-labels', ['g'], ['oyaml', 'ojson'], None),
-        ('all', '--all', ['rm'], None), # caution: reusing the alias
-        ('w', '--watch', ['g'], ['oyaml', 'ojson', 'owide']),
+        ('y', '-o=yaml', ['g'], ['w', 'j', 'sl']),
+        ('w', '-o=wide', ['g'], ['y', 'j']),
+        ('j', '-o=json', ['g'], ['w', 'y', 'sl']),
+        ('a', '--all-namespaces', ['g', 'd'], ['rm', 'f', 'no', 'ns', 'sys']),
+        # ('sl', '--show-labels', ['g'], ['oyaml', 'ojson'], None),
+        ('a', '--all', ['rm'], None), # caution: reusing the alias
+        # ('w', '--watch', ['g'], ['oyaml', 'ojson', 'owide']),
         ]
 
     # these accept a value, so they need to be at the end and
     # mutually exclusive within each other.
-    positional_args = [('f', '--recursive -f', ['g', 'd', 'rm'], res_types + ['all'
-                       , 'l', 'sys']), ('l', '-l', ['g', 'd', 'rm'], ['f',
-                       'all']), ('n', '--namespace', ['g', 'd', 'rm',
-                       'lo', 'ex', 'pf'], ['ns', 'no', 'sys', 'all'])]
+    positional_args = [
+        ('f', '--recursive -f', ['g', 'd', 'rm'], res_types + ['all', 'l', 'sys']),
+        ('l', '-l', ['g', 'd', 'rm'], ['f', 'all']),
+        ('n', '--namespace', ['g', 'd', 'rm', 'lo', 'ex', 'pf'], ['ns', 'no', 'sys', 'all'])
+        ]
 
     # [(part, optional, take_exactly_one)]
     parts = [
@@ -100,14 +87,6 @@ def main():
                         .format(shell, [key for key in shellFormatting]))
 
     out = gen(parts)
-
-    # prepare output
-    if not sys.stdout.isatty():
-        header_path = \
-            os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                         'license_header')
-        with open(header_path, 'r') as f:
-            print(f.read())
 
     seen_aliases = set()
 
