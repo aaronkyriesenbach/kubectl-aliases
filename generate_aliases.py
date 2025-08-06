@@ -34,15 +34,15 @@ def main():
         ]
 
     res = [
-        ('p', 'pods', ['g', 'd', 'rm'], None),
-        ('dp', 'deployment', ['g', 'd', 'rm'], None),
+        ('p', 'pods', ['g', 'd', 'rm', 'e'], None),
+        ('dp', 'deployment', ['g', 'd', 'rm', 'e'], None),
         # ('sts', 'statefulset', ['g', 'd', 'rm'], None),
-        ('sv', 'service', ['g', 'd', 'rm'], None),
-        ('i', 'ingress', ['g', 'd', 'rm'], None),
-        ('cm', 'configmap', ['g', 'd', 'rm'], None),
-        ('s', 'secret', ['g', 'd', 'rm'], None),
+        ('sv', 'service', ['g', 'd', 'rm', 'e'], None),
+        ('i', 'ingress', ['g', 'd', 'rm', 'e'], None),
+        ('cm', 'configmap', ['g', 'd', 'rm', 'e'], None),
+        ('s', 'secret', ['g', 'd', 'rm', 'e'], None),
         # ('no', 'nodes', ['g', 'd'], ['sys']),
-        ('ns', 'namespaces', ['g', 'd', 'rm'], ['sys']),
+        ('ns', 'namespaces', ['g', 'd', 'rm', 'e'], ['sys']),
         ]
     res_types = [r[0] for r in res]
 
